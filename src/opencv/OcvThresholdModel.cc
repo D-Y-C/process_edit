@@ -1,15 +1,10 @@
 #include "OcvThresholdModel.hpp"
-
+#include <OcvData.hpp>
 #include <QtCore/QDir>
 #include <QtCore/QEvent>
-#include <memory>
-
 #include <QtWidgets/QFileDialog>
-
+#include <memory>
 #include <nodes/DataModelRegistry>
-
-#include <OcvData.hpp>
-
 #include <vector>
 
 OcvThresholdModel::OcvThresholdModel()
@@ -38,10 +33,10 @@ void OcvThresholdModel::Threshold(const cv::Mat& source, cv::Mat& dst)
   int type = getParameter("type")->getValueAsEnum();
 
   try {
-    // sum rgb channel
+    /* sum rgb channel */
     cv::Mat sum_mat;
     SumRgb(source, sum_mat);
-    // threshold
+    /* threshold */
     cv::threshold(sum_mat, dst, thresh, max_value, type);
   } catch (cv::Exception& e) {
     const char* err_msg = e.what();
@@ -56,12 +51,10 @@ void OcvThresholdModel::SumRgb(const cv::Mat& src, cv::Mat& dst)
     /* mat is 3 channels image */
     if (src.channels() == 3) {
       std::vector<cv::Mat> planes;
-      // split image onto the color planes.
-      //
+      /* split image onto the color planes. */
       cv::split(src, planes);
       cv::Mat b = planes[0], g = planes[1], r = planes[2], s;
-      // Add equally weighted rgb values.
-      //
+      /* Add equally weighted rgb values. */
       cv::addWeighted(r, 1. / 3., g, 1. / 3., 0.0, s);
       cv::addWeighted(s, 1., b, 1. / 3., 0.0, s);
       dst = s;

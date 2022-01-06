@@ -1,15 +1,15 @@
 #pragma once
 
-#include <QImage>
-#include <opencv2/opencv.hpp> 
-#include <nodes/NodeDataModel>
 #include <QDebug>
+#include <QImage>
+#include <nodes/NodeDataModel>
+#include <opencv2/opencv.hpp>
 
 using QtNodes::NodeData;
 using QtNodes::NodeDataType;
 
-/// The class can potentially incapsulate any user data which
-/// need to be transferred within the Node Editor graph
+/* The class can potentially incapsulate any user data which
+ need to be transferred within the Node Editor graph */
 class OcvData : public NodeData
 {
  public:
@@ -25,26 +25,26 @@ class OcvData : public NodeData
 
   cv::Mat* GetData() const { return mat_ptr_; }
 
-  static void CvMatToQImage(const cv::Mat &inMat,QImage& image)
+  static void CvMatToQImage(const cv::Mat& inMat, QImage& image)
   {
     switch (inMat.type()) {
       // 8-bit, 4 channel
       case CV_8UC4: {
         image = QImage(inMat.data,
-                     inMat.cols,
-                     inMat.rows,
-                     static_cast<int>(inMat.step),
-                     QImage::Format_ARGB32);
+                       inMat.cols,
+                       inMat.rows,
+                       static_cast<int>(inMat.step),
+                       QImage::Format_ARGB32);
         break;
       }
 
       // 8-bit, 3 channel
       case CV_8UC3: {
         image = QImage(inMat.data,
-                     inMat.cols,
-                     inMat.rows,
-                     static_cast<int>(inMat.step),
-                     QImage::Format_RGB888);
+                       inMat.cols,
+                       inMat.rows,
+                       static_cast<int>(inMat.step),
+                       QImage::Format_RGB888);
         image = image.rgbSwapped();
         break;
         ;
@@ -57,7 +57,8 @@ class OcvData : public NodeData
             inMat.rows,
             static_cast<int>(inMat.step),
             QImage::Format_Grayscale8);  // Format_Alpha8 and Format_Grayscale8 were added in Qt 5.5
-        break;;
+        break;
+        ;
       }
 
       default:
@@ -68,7 +69,6 @@ class OcvData : public NodeData
 
     return;
   }
-
 
  private:
   cv::Mat* mat_ptr_;

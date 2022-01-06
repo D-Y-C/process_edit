@@ -1,13 +1,12 @@
+#include "OcvCvtColorModel.hpp"
+#include <OcvData.hpp>
+#include <QDebug>
 #include <QString>
 #include <QtCore/QDir>
 #include <QtCore/QEvent>
-#include <memory>
-#include "OcvCvtColorModel.hpp"
-#include <opencv2/opencv.hpp> 
-
-#include <QDebug>
 #include <QtWidgets/QFileDialog>
-#include <OcvData.hpp>
+#include <memory>
+#include <opencv2/opencv.hpp>
 
 OcvCvtColorModel::OcvCvtColorModel()
 {
@@ -26,12 +25,11 @@ OcvCvtColorModel::OcvCvtColorModel()
   mat_ = new cv::Mat();
 }
 
-void OcvCvtColorModel::process() 
+void OcvCvtColorModel::process()
 {
   OcvData* ocv_data = dynamic_cast<OcvData*>(_inputs[0]->data.get());
 
-  if (ocv_data)
-  {
+  if (ocv_data) {
     cv::Mat mat = ocv_data->GetData()->clone();
     if (!mat.empty()) {
       CvtColor(mat, *mat_);
@@ -46,7 +44,7 @@ std::shared_ptr<NodeData> OcvCvtColorModel::outData(PortIndex idx)
   return std::make_shared<OcvData>(mat_);
 }
 
-void OcvCvtColorModel::CvtColor(cv::Mat& src,cv::Mat& dst)
+void OcvCvtColorModel::CvtColor(cv::Mat& src, cv::Mat& dst)
 {
   cv::Mat result;
 
@@ -54,12 +52,10 @@ void OcvCvtColorModel::CvtColor(cv::Mat& src,cv::Mat& dst)
   eColor upper = getParameter("upper")->getValueAsColor();
 
   try {
-    cv::Mat tmp_mat; 
+    cv::Mat tmp_mat;
     cv::cvtColor(src, tmp_mat, cv::COLOR_RGB2HSV);
-    cv::inRange(tmp_mat, \
-                cv::Scalar(lower.r, lower.g, lower.b), \
-                cv::Scalar(upper.r, upper.g, upper.b), \
-      dst);
+    cv::inRange(
+        tmp_mat, cv::Scalar(lower.r, lower.g, lower.b), cv::Scalar(upper.r, upper.g, upper.b), dst);
 
   } catch (cv::Exception& e) {
     const char* err_msg = e.what();

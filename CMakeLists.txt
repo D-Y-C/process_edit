@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.1.3)
 project(process_edit VERSION 1.2.0)
 project(process_edit LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_BUILD_TYPE Debug)

@@ -10,7 +10,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 
 # =====  STD =====
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
  
 # =====  FIND PACK =====
 #find_package(Qt5 COMPONENTS Core Gui Widgets PrintSupport REQUIRED)

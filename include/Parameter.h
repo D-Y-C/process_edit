@@ -1,11 +1,11 @@
 #ifndef PARAMETER_H
 #define PARAMETER_H
 
-#include "Types.h"
-#include "Variant.h"
-#include <nodes/NodeData>
 #include <QObject>
+#include <nodes/NodeData>
+#include <variant>
 #include "Color.h"
+#include "Types.h"
 
 using QtNodes::NodeDataType;
 
@@ -13,25 +13,25 @@ class BaseNode;
 
 enum ParamType
 {
-    EPT_NONE        = 0,
-    EPT_STRING      = 1,
-    EPT_BOOL        = 2,
-    EPT_FLAGS       = 3,
-    EPT_ENUM        = 4,
-    EPT_FLOAT       = 5,
-    EPT_FXY         = 6,
-    EPT_FXYZ        = 7,
-    EPT_FXYZW       = 8,
-    EPT_INT         = 9,
-    EPT_IXY         = 10,
-    EPT_IXYZ        = 11,
-    EPT_IXYZW       = 12,
-    EPT_FILE        = 13,
-    EPT_TEXT        = 14,
-    EPT_RGB         = 15,
-    EPT_RGBA        = 16,
-    EPT_BUTTON      = 17,
-    EPT_FILESAVE    = 18,
+  EPT_NONE = 0,
+  EPT_STRING = 1,
+  EPT_BOOL = 2,
+  EPT_FLAGS = 3,
+  EPT_ENUM = 4,
+  EPT_FLOAT = 5,
+  EPT_FXY = 6,
+  EPT_FXYZ = 7,
+  EPT_FXYZW = 8,
+  EPT_INT = 9,
+  EPT_IXY = 10,
+  EPT_IXYZ = 11,
+  EPT_IXYZW = 12,
+  EPT_FILE = 13,
+  EPT_TEXT = 14,
+  EPT_RGB = 15,
+  EPT_RGBA = 16,
+  EPT_BUTTON = 17,
+  EPT_FILESAVE = 18,
 };
 /*
 static const NodeDataType PARAM_TYPE[] =
@@ -57,72 +57,69 @@ static const NodeDataType PARAM_TYPE[] =
 };
 */
 
-
-// possible variant type for parameters
-typedef nonstd::variant
-<   eF32,
-    eFXY,
-    eFXYZ,
-    eFXYZW,
-    eInt,
-    eIXY,
-    eIXYZ,
-    eIXYZW,
-    QString,
-    bool,
-    unsigned char,
-    eColor
-> eParamValue;
-
+/** possible variant type for parameters */
+typedef std::variant<eF32,
+                     eFXY,
+                     eFXYZ,
+                     eFXYZW,
+                     eInt,
+                     eIXY,
+                     eIXYZ,
+                     eIXYZW,
+                     QString,
+                     bool,
+                     unsigned char,
+                     eColor>
+    eParamValue;
 
 class Parameter : public QObject
 {
-    Q_OBJECT
-public:
-    ParamType type;
-    QString name;
-    float min;
-    float max;
-    BaseNode* node;
-    bool isConnected;
-    eParamValue baseValue;
-    const eParamValue defVal;
-    eString m_descr; // used for enum and flags texts
+  Q_OBJECT
+ public:
+  ParamType type;
+  QString name;
+  float min;
+  float max;
+  BaseNode* node;
+  bool isConnected;
+  eParamValue baseValue;
+  const eParamValue defVal;
+  eString m_descr;  // used for enum and flags texts
 
-    Parameter();
-    Parameter(ParamType type, QString name, float min, float max, BaseNode* node);
+  Parameter();
+  Parameter(ParamType type, QString name, float min, float max, BaseNode* node);
 
-    unsigned int getComponentCount();
-    void setDescription(const QString &descr);
-    const eString & getDescription() const;
-    ParamType getType();
-    eF32 getMin() const;
-    eF32 getMax() const;
-    BaseNode * getOwnerOp() const;
-    void setChanged(eBool reconnect = eFALSE);
-    const eParamValue & getDefaultValue() const;
-    eParamValue & getBaseValue();
-    const eParamValue & getBaseValue() const;
+  unsigned int getComponentCount();
+  void setDescription(const QString& descr);
+  const eString& getDescription() const;
+  ParamType getType();
+  eF32 getMin() const;
+  eF32 getMax() const;
+  BaseNode* getOwnerOp() const;
+  void setChanged(eBool reconnect = eFALSE);
+  const eParamValue& getDefaultValue() const;
+  eParamValue& getBaseValue();
+  const eParamValue& getBaseValue() const;
 
-    bool getValueAsBool() const;
-    int getValueAsEnum() const;
-    unsigned char getValueAsFlags() const;
-    QString getValueAsString() const;
+  bool getValueAsBool() const;
+  int getValueAsEnum() const;
+  unsigned char getValueAsFlags() const;
+  QString getValueAsString() const;
 
-    eF32 getValueAsFloat() const;
-    eFXY getValueAsFXY() const;
-    eFXYZ getValueAsFXYZ() const;
-    eFXYZW getValueAsFXYZW() const;
+  eF32 getValueAsFloat() const;
+  eFXY getValueAsFXY() const;
+  eFXYZ getValueAsFXYZ() const;
+  eFXYZW getValueAsFXYZW() const;
 
-    eInt getValueAsInt() const;
-    eIXY getValueAsIXY() const;
-    eIXYZ getValueAsIXYZ() const;
-    eIXYZW getValueAsIXYZW() const;
+  eInt getValueAsInt() const;
+  eIXY getValueAsIXY() const;
+  eIXYZ getValueAsIXYZ() const;
+  eIXYZW getValueAsIXYZW() const;
 
-    eColor getValueAsColor() const;
+  eColor getValueAsColor() const;
 
-Q_SIGNALS:
-    void parameterUpdated();
+ Q_SIGNALS:
+  void parameterUpdated();
 };
 
-#endif // PARAMETER_H
+#endif  // PARAMETER_H

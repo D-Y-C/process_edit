@@ -7,29 +7,19 @@
 using QtNodes::NodeData;
 using QtNodes::NodeDataType;
 
-/// The class can potentially incapsulate any user data which
-/// need to be transferred within the Node Editor graph
+/* The class can potentially incapsulate any user data which
+ need to be transferred within the Node Editor graph */
 class PixmapData : public NodeData
 {
-public:
-
+ public:
   PixmapData() {}
 
-  PixmapData(QPixmap const &pixmap)
-    : _pixmap(pixmap)
-  {}
+  PixmapData(QPixmap const &pixmap) : _pixmap(pixmap) {}
 
-  NodeDataType
-  type() const override
-  {
-    //       id      name
-    return {"pixmap", "P"};
-  }
+  NodeDataType type() const override { return {"pixmap", "P"}; }
 
-  QPixmap
-  pixmap() const { return _pixmap; }
+  QPixmap pixmap() const { return _pixmap; }
 
-private:
+ private:
   QPixmap _pixmap;
 };
-

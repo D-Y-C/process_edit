@@ -45,9 +45,9 @@ void OcvLoaderModel::process()
 {
   Parameter* parameter = getParameter("ImageFile");
   if (parameter) {
-    QString fileName = parameter->baseValue.get<QString>();
+    QString fileName = std::get<QString>(parameter->baseValue);
     *mat_ = cv::imread(fileName.toStdString()).clone();
-    getParameter("size")->baseValue.get<eIXY>() = eIXY(mat_->rows, mat_->cols); 
+    std::get<eIXY>(getParameter("size")->baseValue) = eIXY(mat_->rows, mat_->cols);
     dataUpdated(0);
   }
 }

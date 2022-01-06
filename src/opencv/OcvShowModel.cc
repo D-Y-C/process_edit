@@ -1,9 +1,8 @@
 #include "OcvShowModel.hpp"
 #include <QtCore/QDir>
 #include <QtCore/QEvent>
-#include <memory>
-
 #include <QtWidgets/QFileDialog>
+#include <memory>
 #include <nodes/DataModelRegistry>
 #include "OcvData.hpp"
 
@@ -65,7 +64,6 @@ void OcvShowModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
   _nodeData = nodeData;
 
   if (_nodeData) {
-    // OcvData* d = std::dynamic_cast<OcvData*>(_nodeData);
     OcvData *d = dynamic_cast<OcvData *>(_nodeData.get());
 
     int w = _label->width();

@@ -3,8 +3,8 @@
 #include "OcvBaseNode.hpp"
 #include "OcvData.hpp"
 
-/// The model dictates the number of inputs and outputs for the Node.
-/// In this example it has no logic.
+/* The model dictates the number of inputs and outputs for the Node.
+ In this example it has no logic. */
 class OcvThresholdModel : public OcvBaseNode
 {
   Q_OBJECT
@@ -24,11 +24,11 @@ class OcvThresholdModel : public OcvBaseNode
 
   std::shared_ptr<NodeData> outData(PortIndex idx) override;
 
-private:
+ private:
   void OcvThresholdModel::SumRgb(const cv::Mat &src, cv::Mat &dst);
 
   void Threshold(const cv::Mat &source, cv::Mat &dst);
 
- private: 
-  cv::Mat* mat_;
+ private:
+  cv::Mat *mat_;
 };

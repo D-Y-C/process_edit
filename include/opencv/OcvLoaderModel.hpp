@@ -8,56 +8,45 @@
 #include <nodes/DataModelRegistry>
 #include <nodes/NodeDataModel>
 
-#include <opencv2\opencv.hpp> 
 #include <OcvData.hpp>
+#include <opencv2\opencv.hpp>
 #include "OcvBaseNode.hpp"
 
-using QtNodes::PortType;
-using QtNodes::PortIndex;
 using QtNodes::NodeData;
-using QtNodes::NodeDataType;
 using QtNodes::NodeDataModel;
+using QtNodes::NodeDataType;
 using QtNodes::NodeValidationState;
+using QtNodes::PortIndex;
+using QtNodes::PortType;
 
-/// The model dictates the number of inputs and outputs for the Node.
-/// In this example it has no logic.
+/* The model dictates the number of inputs and outputs for the Node.
+ In this example it has no logic. */
 class OcvLoaderModel : public OcvBaseNode
 {
   Q_OBJECT
 
-public:
+ public:
   OcvLoaderModel();
 
-  virtual
-  ~OcvLoaderModel() {}
+  virtual ~OcvLoaderModel() {}
   void process();
 
-public:
+ public:
+  QString caption() const override { return QString("Load Image"); }
 
-  QString
-  caption() const override
-  { return QString("Load Image"); }
+  QString name() const override { return QString("OcvLoaderModel"); }
 
-  QString
-  name() const override { return QString("OcvLoaderModel"); }
+ public:
+  virtual QString modelName() const { return QString("Source Image"); }
 
-public:
+  void setInData(std::shared_ptr<NodeData>, int) override {}
 
-  virtual QString
-  modelName() const
-  { return QString("Source Image"); }
-
-  void
-  setInData(std::shared_ptr<NodeData>, int) override
-  { }
-
-  bool
-  resizable() const override { return true; }
+  bool resizable() const override { return true; }
 
   std::shared_ptr<NodeData> outData(PortIndex port) override;
 
-protected:
-private:
+ protected:
+ private:
   QPixmap _pixmap;
 
   cv::Mat* mat_;

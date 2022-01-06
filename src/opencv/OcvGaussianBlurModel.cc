@@ -12,7 +12,6 @@ OcvGaussianBlurModel::OcvGaussianBlurModel()
       PortType::Out, NODE_DATA_TYPE[NodeClassMat], QString("NodeClassMat"), NodeClassMat));
 
   /* parameter */
-  // set reflect_101 as default value
   addParameter<eInt>(EPT_ENUM, "border type", 0, 255, 4);
   _parameters.back()->setDescription("constant|replicate|reflect|wrap|reflect_101|transparent");
   addParameter<eIXY>(EPT_IXY, "kernel size", 0, 100, eIXY(3, 3));
@@ -31,7 +30,7 @@ void OcvGaussianBlurModel::process()
       int type = getParameter("border type")->getValueAsEnum();
       eIXY kel_size = getParameter("kernel size")->getValueAsIXY();
       eFXY sigma = getParameter("sigma(x,y)")->getValueAsFXY();
-      GaussianBlur(mat, *mat_,Size(kel_size.x,kel_size.y),sigma.x,sigma.y,type);
+      GaussianBlur(mat, *mat_, Size(kel_size.x, kel_size.y), sigma.x, sigma.y, type);
       dataUpdated(0);
     }
   }
