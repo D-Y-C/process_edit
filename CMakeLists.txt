@@ -7,7 +7,7 @@ project(process_edit LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_BUILD_TYPE Debug)
+#set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_AUTOMOC ON)
 
 add_definitions(-DNODE_EDITOR_STATIC)
@@ -60,14 +60,14 @@ link_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/nodeediter/lib
 	${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/opencv/lib)
 
-if(CMAKE_BUILD_TYPE MATCHES "Debug")
-	link_libraries(opencv_world452d nodesd)
-else()
-	link_libraries(opencv_world452 nodes)
-endif()
-
 # ===== LINK LIBRARY =====
 link_libraries(Qt5::Core Qt5::Gui Qt5::Widgets Qt5::PrintSupport)
+
+link_libraries(debug opencv_world452d)
+link_libraries(debug nodesd)
+
+link_libraries(optimized opencv_world452)
+link_libraries(optimized nodes)
 
 # ===== CREATE LIBRARY =====
 add_library(${PROJECT_NAME} STATIC ${LIB_SRC} ${LIB_OPENCV})
@@ -92,3 +92,15 @@ if(${BUILD_TESTING})
 endif()
 
 ADD_SUBDIRECTORY(app/opencv_process_edit)
+
+# ===== IDE CONFIGURATION =====
+IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
+	link_libraries(pthread)
+ELSEIF(CMAKE_SYSTEM_NAME MATCHES "Windows")
+	set(CMAKE_CXX_FLAGS_RELEASE "/Zi /Od /DEBUG") #release
+	set(CMAKE_CXX_FLAGS_DEBUG "/Zi /Od /DEBUG") #debug
+	target_link_libraries(${PROJECT_NAME} ws2_32 winmm)
+	ADD_DEFINITIONS(-DWIN32_LEAN_AND_MEAN)
+ELSE()
+	MESSAGE(STATUS "other platform: ${CMAKE_SYSTEM_NAME}")
+ENDIF(CMAKE_SYSTEM_NAME MATCHES "Linux")

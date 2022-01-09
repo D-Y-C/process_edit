@@ -20,7 +20,8 @@ OcvCvtColorModel::OcvCvtColorModel()
   /* parameter */
   addParameter<eColor>(EPT_RGBA, "lower", 0, 255, eColor(0, 0, 0));
   addParameter<eColor>(EPT_RGBA, "upper", 0, 255, eColor(255, 255, 255));
-  //_parameters.back()->setDescription("binary|binary-inv|trunc|tozero|tozero-inv|mask|otsu");
+  addParameter<int>(EPT_ENUM, "type", 0, 255, 0);
+  _parameters.back()->setDescription("RGB2GRAY");
 
   mat_ = new cv::Mat();
 }
@@ -50,12 +51,24 @@ void OcvCvtColorModel::CvtColor(cv::Mat& src, cv::Mat& dst)
 
   eColor lower = getParameter("lower")->getValueAsColor();
   eColor upper = getParameter("upper")->getValueAsColor();
+  cv::ColorConversionCodes conver_code;
+  int type = getParameter("type")->getValueAsInt();
+
+  /* clang-format off */
+  switch (type) {
+    case 0: {conver_code = cv::COLOR_RGB2GRAY; break;}
+    default: {
+      conver_code = cv::COLOR_RGB2GRAY;
+      break;
+    }
+  }
+  /* clang-format on */
 
   try {
     cv::Mat tmp_mat;
-    cv::cvtColor(src, tmp_mat, cv::COLOR_RGB2HSV);
-    cv::inRange(
-        tmp_mat, cv::Scalar(lower.r, lower.g, lower.b), cv::Scalar(upper.r, upper.g, upper.b), dst);
+    cv::cvtColor(src, tmp_mat, conver_code);
+    //cv::inRange(
+    //    tmp_mat, cv::Scalar(lower.r, lower.g, lower.b), cv::Scalar(upper.r, upper.g, upper.b), dst);
 
   } catch (cv::Exception& e) {
     const char* err_msg = e.what();

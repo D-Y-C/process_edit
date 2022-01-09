@@ -74,7 +74,7 @@ protected:
     void createParamWidgets() { _paramWidget = new ParamWidget(this); }
 
     template<typename T>
-    void addParameter(ParamType type, QString name, float min, float max, T value)
+    void addParameter(::ParamType type, QString name, float min, float max, T value)
     {
         Parameter* p = new Parameter(type, name, min, max, this);
         p->baseValue = (T)value;

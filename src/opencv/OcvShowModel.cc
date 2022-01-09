@@ -75,9 +75,7 @@ void OcvShowModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
     QImage img;
     OcvData::CvMatToQImage(*mat_, img);
     _label->setPixmap(QPixmap::fromImage(img.scaled(w, h, Qt::KeepAspectRatio)));
-  } else {
-    _label->setPixmap(QPixmap());
-  }
+  } 
   Q_EMIT dataUpdated(0);
 }
 

@@ -22,7 +22,7 @@ class OcvMedianBlurModel : public OcvBaseNode
   std::shared_ptr<NodeData> outData(PortIndex idx) override;
 
  private:
-  void Mophology(cv::Mat& src, cv::Mat& dst);
+  void MedianBlur(cv::Mat& src, cv::Mat& dst);
 
  private:
   cv::Mat* mat_;

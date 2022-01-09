@@ -5,6 +5,8 @@
 
 using namespace cv;
 
+constexpr int kMaxDrawContours = 10;
+
 OcvFindContoursModel::OcvFindContoursModel()
 {
   /* input */
@@ -51,7 +53,7 @@ void OcvFindContoursModel::FindContours(Mat& src, Mat& dst, int mode, int method
 
     cv::findContours(src, counters, hierarchy, RETR_LIST, CHAIN_APPROX_NONE);
     dst = Mat(src.rows, src.cols, CV_8UC3, Scalar(0, 0, 0));
-    for (int i = 0; i < counters.size(); i++) {
+    for (int i = 0; i < counters.size() && i < kMaxDrawContours; i++) {
       drawContours(dst, counters, i, Scalar(0, 0, 255), 1, 8, hierarchy);
     }
   } catch (Exception& e) {

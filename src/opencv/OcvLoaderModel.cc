@@ -14,9 +14,10 @@ OcvLoaderModel::OcvLoaderModel()
 
   addParameter<QString>(EPT_FILE, "ImageFile", 0, 0, QString("Files"));
   addParameter<eIXY>(EPT_IXY, "size", 0, 10000000000, eIXY(0, 0));
+  addParameter<QString>(EPT_BUTTON, "Refresh", 0, 0, "Refresh");
 
   mat_ = new cv::Mat();
-
+  
   return;
 
   addParameter<QString>(EPT_TEXT, "EPT_TEXT", 0, 0, QString("params1"));
@@ -46,6 +47,7 @@ void OcvLoaderModel::process()
   Parameter* parameter = getParameter("ImageFile");
   if (parameter) {
     QString fileName = std::get<QString>(parameter->baseValue);
+    qDebug() << "Load image file : " <<  fileName;
     *mat_ = cv::imread(fileName.toStdString()).clone();
     std::get<eIXY>(getParameter("size")->baseValue) = eIXY(mat_->rows, mat_->cols);
     dataUpdated(0);
