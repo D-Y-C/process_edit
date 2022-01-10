@@ -16,6 +16,7 @@
 #include "OcvResizeModel.hpp"
 #include "OcvShowModel.hpp"
 #include "OcvThresholdModel.hpp"
+#include "OcvInpaintModel.hpp"
 
 using QtNodes::DataModelRegistry;
 
@@ -55,16 +56,23 @@ void ProcessEditMode::createWindow()
 static std::shared_ptr<DataModelRegistry> registerDataModels()
 {
   std::shared_ptr<DataModelRegistry> ret = std::make_shared<DataModelRegistry>();
-  ret->registerModel<OcvShowModel>("Ocv");
-  ret->registerModel<OcvLoaderModel>("Ocv");
-  ret->registerModel<OcvThresholdModel>("Ocv");
-  ret->registerModel<OcvCvtColorModel>("Ocv");
-  ret->registerModel<OcvMophologyModel>("Ocv");
-  ret->registerModel<OcvResizeModel>("Ocv");
-  //  ret->registerModel<OcvBilateralFilterModel>();
-  ret->registerModel<OcvBlurModel>("Ocv");
-  ret->registerModel<OcvGaussianBlurModel>("Ocv");
-  ret->registerModel<OcvMedianBlurModel>("Ocv");
+  /* Base types */
+  ret->registerModel<OcvShowModel>("Base");
+  ret->registerModel<OcvLoaderModel>("Base");
+
+  /* Image Filter types */ 
+  ret->registerModel<OcvBlurModel>("Filter");
+  ret->registerModel<OcvGaussianBlurModel>("Filter");
+  ret->registerModel<OcvMedianBlurModel>("Filter");
+  ret->registerModel<OcvThresholdModel>("Filter");
+  ret->registerModel<OcvMophologyModel>("Filter");
+
+  /* Image Transform types */
+  ret->registerModel<OcvInpaintModel>("Transform");
+  ret->registerModel<OcvResizeModel>("Transform");
+  ret->registerModel<OcvCvtColorModel>("Transform");
+
+  /* Unknow types */ 
   ret->registerModel<OcvFindContoursModel>("Ocv");
 
   return ret;
