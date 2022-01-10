@@ -5,6 +5,7 @@
 #include <memory>
 #include <nodes/DataModelRegistry>
 #include "OcvData.hpp"
+#include "RoiLabel.h"
 
 OcvShowModel::OcvShowModel() : _label(new QLabel("Image will appear here"))
 {
@@ -19,6 +20,8 @@ OcvShowModel::OcvShowModel() : _label(new QLabel("Image will appear here"))
   _label->setFixedSize(400, 400);
 
   _label->installEventFilter(this);
+
+  mat_ = new cv::Mat();
 }
 
 unsigned int OcvShowModel::nPorts(PortType portType) const
@@ -45,13 +48,23 @@ bool OcvShowModel::eventFilter(QObject *object, QEvent *event)
   if (object == _label) {
     int w = _label->width();
     int h = _label->height();
-
     if (event->type() == QEvent::Resize) {
       return true;
       QImage img;
       OcvData::CvMatToQImage(*mat_, img);
       _label->setPixmap(QPixmap::fromImage(img.scaled(w, h, Qt::KeepAspectRatio)));
       return true;
+    }     
+    else if (event->type() == QEvent::ContextMenu) {
+      RoiDialog roi_dialog;
+      QImage img;
+      OcvData::CvMatToQImage(*mat_, img);
+      roi_dialog.SetImage(img);
+
+      connect(&roi_dialog, SIGNAL(SelectRoiImag(const QImage&)),this,SLOT(SetImage(const QImage&)));
+
+      roi_dialog.show();
+      roi_dialog.exec();
     }
   }
   return false;
@@ -66,20 +79,41 @@ void OcvShowModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
   if (_nodeData) {
     OcvData *d = dynamic_cast<OcvData *>(_nodeData.get());
 
-    int w = _label->width();
-    int h = _label->height();
-
-    mat_ = d->GetData();
-
-    /* cover cv::mat to qimage */
-    QImage img;
-    OcvData::CvMatToQImage(*mat_, img);
-    _label->setPixmap(QPixmap::fromImage(img.scaled(w, h, Qt::KeepAspectRatio)));
+    cv::Mat mat = d->GetData()->clone();
+    SetMat(mat);
   } 
   Q_EMIT dataUpdated(0);
 }
 
 std::shared_ptr<NodeData> OcvShowModel::outData(PortIndex port)
 {
-  return std::make_shared<OcvData>(mat_);
+  cv::Mat *mat_ptr = new cv::Mat();
+  *mat_ptr = mat_->clone(); 
+  return std::make_shared<OcvData>(mat_ptr);
+}
+
+void OcvShowModel::SetImage(const QImage &image) {
+  OcvData::QImage2cvMat(*mat_,image);
+
+  QImage img;
+  int w = _label->width();
+  int h = _label->height();
+  OcvData::CvMatToQImage(*mat_, img);
+  _label->setPixmap(QPixmap::fromImage(img.scaled(w, h, Qt::KeepAspectRatio)));
+  dataUpdated(0);
+}
+
+
+void OcvShowModel::SetMat(const cv::Mat& mat) 
+{
+  int w = _label->width();
+  int h = _label->height();
+
+  *mat_ = mat.clone();
+
+  /* cover cv::mat to qimage */
+  QImage img;
+  OcvData::CvMatToQImage(*mat_, img);
+  _label->setPixmap(QPixmap::fromImage(img.scaled(w, h, Qt::KeepAspectRatio)));
+  dataUpdated(0);
 }
