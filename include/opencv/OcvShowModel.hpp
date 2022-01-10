@@ -31,12 +31,12 @@ class OcvShowModel : public NodeDataModel
   QString name() const override { return QString("OcvShowModel"); }
 
   std::shared_ptr<NodeData> outData(PortIndex port) override;
-public slots:
+ public slots:
   void SetImage(const QImage &image);
 
   void SetMat(const cv::Mat &mat);
 
-public:
+ public:
   virtual QString modelName() const { return QString("Resulting Image"); }
 
   unsigned int nPorts(PortType portType) const override;
@@ -53,10 +53,9 @@ public:
   bool eventFilter(QObject *object, QEvent *event) override;
 
  private:
+  QLabel *_label;
 
-  QLabel* _label;
-
-  cv::Mat* mat_;
+  cv::Mat *mat_;
 
   std::shared_ptr<NodeData> _nodeData;
 };

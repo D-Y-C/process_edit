@@ -5,27 +5,25 @@
 #include <nodes/FlowView>
 #include <nodes/NodeData>
 
-#include "OcvCvtColorModel.hpp"
-#include "OcvLoaderModel.hpp"
-#include "OcvShowModel.hpp"
-#include "OcvThresholdModel.hpp"
-#include "OcvMorphologyModel.hpp"
-#include "OcvResizeModel.hpp"
 #include "OcvBilateralFilterModel.hpp"
 #include "OcvBlurModel.hpp"
-#include "OcvMedianBlurModel.hpp"
-#include "OcvGaussianBlurModel.hpp"
+#include "OcvCvtColorModel.hpp"
 #include "OcvFindContours.hpp"
+#include "OcvGaussianBlurModel.hpp"
+#include "OcvLoaderModel.hpp"
+#include "OcvMedianBlurModel.hpp"
+#include "OcvMorphologyModel.hpp"
+#include "OcvResizeModel.hpp"
+#include "OcvShowModel.hpp"
+#include "OcvThresholdModel.hpp"
 
 using QtNodes::DataModelRegistry;
-
-static std::shared_ptr<DataModelRegistry> registerDataModels();
 
 using namespace cv;
 
 static std::shared_ptr<DataModelRegistry> registerDataModels();
 
-ProcessEditMode::ProcessEditMode(QWidget* parent) : FancyMode(parent) 
+ProcessEditMode::ProcessEditMode(QWidget* parent) : FancyMode(parent)
 {
   setObjectName(QLatin1String("ProcessEdit"));
   setDisplayName(tr("ProcessEdit"));
@@ -36,7 +34,7 @@ ProcessEditMode::ProcessEditMode(QWidget* parent) : FancyMode(parent)
 
 ProcessEditMode::~ProcessEditMode() {}
 
-void ProcessEditMode::createWindow() 
+void ProcessEditMode::createWindow()
 {
   flow_scene_ = new QtNodes::FlowScene(registerDataModels(), this);
   flow_view_ = new QtNodes::FlowView(flow_scene_);
@@ -56,18 +54,18 @@ void ProcessEditMode::createWindow()
 
 static std::shared_ptr<DataModelRegistry> registerDataModels()
 {
-  auto ret = std::make_shared<DataModelRegistry>();
-  ret->registerModel<OcvShowModel>();
-  ret->registerModel<OcvLoaderModel>();
-  ret->registerModel<OcvThresholdModel>();
-  ret->registerModel<OcvCvtColorModel>();
-  ret->registerModel<OcvMophologyModel>();
-  ret->registerModel<OcvResizeModel>();
+  std::shared_ptr<DataModelRegistry> ret = std::make_shared<DataModelRegistry>();
+  ret->registerModel<OcvShowModel>("Ocv");
+  ret->registerModel<OcvLoaderModel>("Ocv");
+  ret->registerModel<OcvThresholdModel>("Ocv");
+  ret->registerModel<OcvCvtColorModel>("Ocv");
+  ret->registerModel<OcvMophologyModel>("Ocv");
+  ret->registerModel<OcvResizeModel>("Ocv");
   //  ret->registerModel<OcvBilateralFilterModel>();
-  ret->registerModel<OcvBlurModel>();
-  ret->registerModel<OcvGaussianBlurModel>();
-  ret->registerModel<OcvMedianBlurModel>();
-  ret->registerModel<OcvFindContoursModel>();
+  ret->registerModel<OcvBlurModel>("Ocv");
+  ret->registerModel<OcvGaussianBlurModel>("Ocv");
+  ret->registerModel<OcvMedianBlurModel>("Ocv");
+  ret->registerModel<OcvFindContoursModel>("Ocv");
 
   return ret;
 }
@@ -78,7 +76,8 @@ bool ProcessEditMode::save(QString& file)
   return true;
 }
 
-bool ProcessEditMode::open(QString& file) {
+bool ProcessEditMode::open(QString& file)
+{
   flow_scene_->load();
   return true;
 }
