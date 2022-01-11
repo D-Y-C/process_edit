@@ -8,15 +8,16 @@
 #include "OcvBilateralFilterModel.hpp"
 #include "OcvBlurModel.hpp"
 #include "OcvCvtColorModel.hpp"
+#include "OcvEqualizeHistModel.h"
 #include "OcvFindContours.hpp"
 #include "OcvGaussianBlurModel.hpp"
+#include "OcvInpaintModel.hpp"
 #include "OcvLoaderModel.hpp"
 #include "OcvMedianBlurModel.hpp"
 #include "OcvMorphologyModel.hpp"
 #include "OcvResizeModel.hpp"
 #include "OcvShowModel.hpp"
 #include "OcvThresholdModel.hpp"
-#include "OcvInpaintModel.hpp"
 
 using QtNodes::DataModelRegistry;
 
@@ -60,7 +61,7 @@ static std::shared_ptr<DataModelRegistry> registerDataModels()
   ret->registerModel<OcvShowModel>("Base");
   ret->registerModel<OcvLoaderModel>("Base");
 
-  /* Image Filter types */ 
+  /* Image Filter types */
   ret->registerModel<OcvBlurModel>("Filter");
   ret->registerModel<OcvGaussianBlurModel>("Filter");
   ret->registerModel<OcvMedianBlurModel>("Filter");
@@ -71,8 +72,9 @@ static std::shared_ptr<DataModelRegistry> registerDataModels()
   ret->registerModel<OcvInpaintModel>("Transform");
   ret->registerModel<OcvResizeModel>("Transform");
   ret->registerModel<OcvCvtColorModel>("Transform");
+  ret->registerModel<OcvEqualizeHistModel>("Transform");
 
-  /* Unknow types */ 
+  /* Unknow types */
   ret->registerModel<OcvFindContoursModel>("Ocv");
 
   return ret;

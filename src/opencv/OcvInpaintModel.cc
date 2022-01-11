@@ -14,8 +14,8 @@
 OcvInpaintModel::OcvInpaintModel()
 {
   /* input */
-  _inputs.push_back(new ePort(
-      PortType::Out, NODE_DATA_TYPE[NodeClassMat], QString("NodeClassMat"), NodeClassMat));
+  _inputs.push_back(
+      new ePort(PortType::In, NODE_DATA_TYPE[NodeClassMat], QString("NodeClassMat"), NodeClassMat));
   /* output */
   _outputs.push_back(new ePort(
       PortType::Out, NODE_DATA_TYPE[NodeClassMat], QString("NodeClassMat"), NodeClassMat));
