@@ -16,7 +16,5 @@ class OcvBaseNode : public BaseNode
   Q_OBJECT
  public:
   OcvBaseNode(){};
-
-  virtual bool portCaptionVisible(PortType, PortIndex) const override { return false; }
   virtual bool resizable() const override { return true; }
 };

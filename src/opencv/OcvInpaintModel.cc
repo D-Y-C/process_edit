@@ -23,8 +23,7 @@ OcvInpaintModel::OcvInpaintModel()
   /* parameter */
   addParameter<float>(EPT_FLOAT, "Radius", 0, 255, 0);
   addParameter<int>(EPT_ENUM, "Flags", 0, 2, 0);
-  _parameters.back()->setDescription("INPAINT_NS");
-  _parameters.back()->setDescription("NPAINT_TELEA");
+  _parameters.back()->setDescription("INPAINT_NS|NPAINT_TELEA");
 
   mat_ = new cv::Mat();
 }

@@ -17,6 +17,7 @@
 #include "OcvMorphologyModel.hpp"
 #include "OcvResizeModel.hpp"
 #include "OcvShowModel.hpp"
+#include "OcvSplitModel.h"
 #include "OcvThresholdModel.hpp"
 
 using QtNodes::DataModelRegistry;
@@ -60,6 +61,7 @@ static std::shared_ptr<DataModelRegistry> registerDataModels()
   /* Base types */
   ret->registerModel<OcvShowModel>("Base");
   ret->registerModel<OcvLoaderModel>("Base");
+  ret->registerModel<OcvSplitModel>("Base");
 
   /* Image Filter types */
   ret->registerModel<OcvBlurModel>("Filter");
