@@ -12,7 +12,7 @@ OcvMedianBlurModel::OcvMedianBlurModel()
       PortType::Out, NODE_DATA_TYPE[NodeClassMat], QString("NodeClassMat"), NodeClassMat));
 
   /* parameter */
-  addParameter<int>(EPT_INT, "kernel size", 0, 1000, 3);
+  addParameter<int>(EPT_INT, "kernel size", 3, 1000, 3);
 
   mat_ = new Mat();
 }
@@ -41,7 +41,10 @@ void OcvMedianBlurModel::MedianBlur(Mat& src, Mat& dst)
 
   try {
     Mat tmp_mat;
-    cv::medianBlur(src, dst,kel_size);
+
+    kel_size += (kel_size % 2) == 1 ? 0 : 1;
+
+    cv::medianBlur(src, dst, kel_size);
   } catch (Exception& e) {
     const char* err_msg = e.what();
     qFatal("opecv exception caught: %s", err_msg);

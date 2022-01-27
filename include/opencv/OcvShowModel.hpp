@@ -3,20 +3,12 @@
 #include <QtCore/QObject>
 #include <QtWidgets/QLabel>
 #include <iostream>
-#include <nodes/DataModelRegistry>
-#include <nodes/NodeDataModel>
+#include "OcvBaseNode.hpp"
 #include "OcvData.hpp"
-
-using QtNodes::NodeData;
-using QtNodes::NodeDataModel;
-using QtNodes::NodeDataType;
-using QtNodes::NodeValidationState;
-using QtNodes::PortIndex;
-using QtNodes::PortType;
 
 /* The model dictates the number of inputs and outputs for the Node.
  In this example it has no logic. */
-class OcvShowModel : public NodeDataModel
+class OcvShowModel : public OcvBaseNode
 {
   Q_OBJECT
 
@@ -39,15 +31,11 @@ class OcvShowModel : public NodeDataModel
  public:
   virtual QString modelName() const { return QString("Resulting Image"); }
 
-  unsigned int nPorts(PortType portType) const override;
-
-  NodeDataType dataType(PortType portType, PortIndex portIndex) const override;
-
-  void setInData(std::shared_ptr<NodeData> nodeData, PortIndex port) override;
-
   QWidget *embeddedWidget() override { return _label; }
 
   bool resizable() const override { return false; }
+
+  void process();
 
  protected:
   bool eventFilter(QObject *object, QEvent *event) override;
@@ -57,5 +45,5 @@ class OcvShowModel : public NodeDataModel
 
   cv::Mat *mat_;
 
-  std::shared_ptr<NodeData> _nodeData;
+  cv::Mat *in_mat_;
 };

@@ -59,7 +59,7 @@ class BaseNode : public NodeDataModel
   Parameter* getParameter(unsigned int index);
   Parameter* getParameter(const QString name);
 
- protected:
+ public:
   virtual bool captionVisible() const override { return true; }
   virtual bool portCaptionVisible(PortType, PortIndex) const override { return true; }
   QString portCaption(PortType portType, PortIndex portIndex) const override;
@@ -86,13 +86,13 @@ class BaseNode : public NodeDataModel
     return ptr;
   }
 
- protected:
+ public:
   std::vector<ePort*> _inputs;
   std::vector<ePort*> _outputs;
   ParamWidget* _paramWidget;
   std::vector<Parameter*> _parameters;
 
- protected:
+ public:
   NodeValidationState modelValidationState = NodeValidationState::Valid;
   QString modelValidationError = QString("ok");
   NodeValidationState validationState() const;

@@ -60,25 +60,30 @@ void OcvSplitModel::Split(cv::Mat& src, std::vector<cv::Mat>& dst)
 {
   int type = getParameter("Type")->getValueAsEnum();
 
-  if (src.channels() == 3) {
-    /* BGR */
-    if (type == 0) {
-      cv::split(src, dst);
-      /* Set visible string */
-      _outputs[0]->name = "G";
-      _outputs[1]->name = "B";
-      _outputs[2]->name = "R";
+  try {
+    if (src.channels() == 3) {
+      /* BGR */
+      if (type == 0) {
+        cv::split(src, dst);
+        /* Set visible string */
+        _outputs[0]->name = "G";
+        _outputs[1]->name = "B";
+        _outputs[2]->name = "R";
+      } else {
+        cv::cvtColor(src, src, cv::COLOR_BGR2HSV);
+        cv::split(src, dst);
+        /* Set visible string */
+        _outputs[0]->name = "H";
+        _outputs[1]->name = "S";
+        _outputs[2]->name = "V";
+      }
     } else {
-      cv::cvtColor(src, src, cv::COLOR_BGR2HSV);
-      cv::split(src, dst);
-      /* Set visible string */
-      _outputs[0]->name = "H";
-      _outputs[1]->name = "S";
-      _outputs[2]->name = "V";
+      dst[0] = src;
+      dst[1] = src;
+      dst[2] = src;
     }
-  } else {
-    dst[0] = src;
-    dst[1] = src;
-    dst[2] = src;
+  } catch (cv::Exception& e) {
+    const char* err_msg = e.what();
+    qFatal("opecv exception caught: %s", err_msg);
   }
 }

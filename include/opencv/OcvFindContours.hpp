@@ -23,7 +23,8 @@ class OcvFindContoursModel : public OcvBaseNode
 
  private:
   void FindContours(cv::Mat& src, cv::Mat& dst, int mode, int method);
+  void DrawRotatedRectangle(cv::Mat& src, cv::RotatedRect& rect);
 
- private :
+ private:
   cv::Mat* mat_;
 };

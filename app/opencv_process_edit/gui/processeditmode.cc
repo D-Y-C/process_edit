@@ -7,10 +7,12 @@
 
 #include "OcvBilateralFilterModel.hpp"
 #include "OcvBlurModel.hpp"
+#include "OcvCannyModel.h"
 #include "OcvCvtColorModel.hpp"
 #include "OcvEqualizeHistModel.h"
 #include "OcvFindContours.hpp"
 #include "OcvGaussianBlurModel.hpp"
+#include "OcvHoughLinesModel.h"
 #include "OcvInpaintModel.hpp"
 #include "OcvLoaderModel.hpp"
 #include "OcvMedianBlurModel.hpp"
@@ -75,7 +77,10 @@ static std::shared_ptr<DataModelRegistry> registerDataModels()
   ret->registerModel<OcvResizeModel>("Transform");
   ret->registerModel<OcvCvtColorModel>("Transform");
   ret->registerModel<OcvEqualizeHistModel>("Transform");
+  ret->registerModel<OcvHoughLinesModel>("Transform");
 
+  /* Analyse */
+  ret->registerModel<QcvCannyModel>("Analyse");
   /* Unknow types */
   ret->registerModel<OcvFindContoursModel>("Ocv");
 

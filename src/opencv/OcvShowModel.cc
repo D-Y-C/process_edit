@@ -21,26 +21,16 @@ OcvShowModel::OcvShowModel() : _label(new QLabel("Image will appear here"))
 
   _label->installEventFilter(this);
 
+  /* input */
+  _inputs.push_back(
+      new ePort(PortType::In, NODE_DATA_TYPE[NodeClassMat], QString("cv::mat"), NodeClassMat));
+
+  /* output */
+  _outputs.push_back(
+      new ePort(PortType::Out, NODE_DATA_TYPE[NodeClassMat], QString("cv::mat"), NodeClassMat));
+
   mat_ = new cv::Mat();
-}
-
-unsigned int OcvShowModel::nPorts(PortType portType) const
-{
-  unsigned int result = 1;
-
-  switch (portType) {
-    case PortType::In:
-      result = 1;
-      break;
-
-    case PortType::Out:
-      result = 1;
-
-    default:
-      break;
-  }
-
-  return result;
+  in_mat_ = new cv::Mat();
 }
 
 bool OcvShowModel::eventFilter(QObject *object, QEvent *event)
@@ -55,12 +45,11 @@ bool OcvShowModel::eventFilter(QObject *object, QEvent *event)
       _label->setPixmap(QPixmap::fromImage(img.scaled(w, h, Qt::KeepAspectRatio)));
       return true;
     } else if (event->type() == QEvent::ContextMenu) {
-      if (_nodeData) {
-        OcvData *d = dynamic_cast<OcvData *>(_nodeData.get());
+      if (!in_mat_->empty()) {
         RoiDialog roi_dialog;
         QImage img;
 
-        OcvData::CvMatToQImage(*d->GetData(), img);
+        OcvData::CvMatToQImage(*in_mat_, img);
         roi_dialog.SetImage(img);
 
         connect(&roi_dialog,
@@ -75,20 +64,6 @@ bool OcvShowModel::eventFilter(QObject *object, QEvent *event)
   return false;
 }
 
-NodeDataType OcvShowModel::dataType(PortType, PortIndex) const { return OcvData().type(); }
-
-void OcvShowModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
-{
-  _nodeData = nodeData;
-
-  if (_nodeData) {
-    OcvData *d = dynamic_cast<OcvData *>(_nodeData.get());
-    cv::Mat *mat = d->GetData();
-    SetMat(*mat);
-  }
-  Q_EMIT dataUpdated(0);
-}
-
 std::shared_ptr<NodeData> OcvShowModel::outData(PortIndex port)
 {
   /* BUG: Garbled characters appear when other modules are connected to the output  */
@@ -96,6 +71,23 @@ std::shared_ptr<NodeData> OcvShowModel::outData(PortIndex port)
   *mat_ = mat.clone();
 
   return std::make_shared<OcvData>(mat_);
+}
+
+void OcvShowModel::process()
+{
+  OcvData *ocv_data = dynamic_cast<OcvData *>(_inputs[0]->data.get());
+
+  if (ocv_data) {
+    *in_mat_ = ocv_data->GetData()->clone();
+    if (!in_mat_->empty()) {
+      SetMat(*in_mat_);
+
+      Q_EMIT dataUpdated(0);
+      setValidationState(NodeValidationState::Valid, QString("Image is null"));
+    } else {
+      setValidationState(NodeValidationState::Warning, QString("Image is null"));
+    }
+  }
 }
 
 void OcvShowModel::SetImage(const QImage &image)
